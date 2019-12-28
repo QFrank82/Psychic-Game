@@ -1,49 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Psychic Game(Basic)</title>
-	
-	<!-- Bootstrap Core CSS -->
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-	<!-- Custom CSS -->
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
+	<title>Psychic Game</title>
 </head>
+
 <body>
-<header>
-	<div class="page-header">
-	  <h1>The Psychic Game </h1>
-	</div>
-</header>
-<div class="container">
-	<h2>Guess what letter I'm thinking of</h2>
-	<div class="row">
-		<div class="col-md-4">
-			<img src="assets/images/Psychic.jpg" class="thumbnail" alt="...">
-		</div>
-		<div class="col-md-4">
-			<ul id="space" class="list-group">
-				<li class="list-group-item" id="wins">Wins:</li>
-				<li class="list-group-item" id="lose">Losses:</li>
-				<li class="list-group-item" id="guessesLeft">Guesses Left:</li>
-				<li class="list-group-item" id="letter">Your Guesses so far:</li>
-			</ul>
-		</div>
-		<div class="col-md-2">
-			<img src="assets/images/Psychics.jpg" class="thumbnail" alt="...">
-		</div>
-	</div>
+<div id="game-info">
+	<h1>The Psychic Game</h1>
+	<h2>Guess Number I am Thinking of</h2>
+	<h3 id="wins">Wins: </h3>
+	<h3 id="losses">Losses: </h3>
+	<h3 id="guessesRemaining">Guesses Left: </h3>
+	<h3 id="guessesSoFar">Your Guesses So Far:</h3>
 </div>
 
-	
 
-<!-- Javascript game.js -->
-<script type="text/javascript" src="assets/javascript/game.js"></script>
+<script type="text/javascript">
+	var wins = document.getElementById("wins");
+	var losses = document.getElementById("losses");
+	var guessesRemaining = document.getElementById("guessesRemaining");
+	var guessesSoFar = document.getElementById("guessesSoFar");
+	var allLetters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+	var winsCount = 0;
+	var lossesCount = 0;
+	var defaultGuessesRemaining = 9;
+	var guessesRemainingCount = defaultGuessesRemaining;
+	var guessesArray = [];
+	var getRandomLetter = function () {
+		randomLetter = allLetters[Math.floor(Math.random()*allLetters.length)]
+		console.log(randomLetter);
+		return randomLetter
+	}	
+	var displayStats = function () {
+		wins.innerHTML = "Wins: " + winsCount
+		losses.innerHTML = "Losses: " + lossesCount
+		guessesRemaining.innerHTML = "Guesses Left: " + guessesRemainingCount
+		guessesSoFar.innerHTML = "Your Guesses So Far: " + guessesArray
+	}
+	var resetGame = function () {
+		guessesArray = [];
+		guessesRemainingCount = defaultGuessesRemaining;
+		currentLetter = getRandomLetter();
+	}
+	var userWon = function (userLetter) {
+		return userLetter === currentLetter 
+	}
+	var userLost = function () {
+		return guessesRemainingCount === 0;
+	}
+	var currentLetter = getRandomLetter();
+	displayStats();
+	document.onkeyup = function (event) {
+		var userLetter = event.key;
+		guessesRemainingCount--
+		guessesArray.push(userLetter)
+		if (userWon(userLetter)) {
+			winsCount++;
+			resetGame();
+		} 
+		if (userLost()) {
+			lossesCount++;
+			resetGame();
+		}
+		displayStats();
+	}
+</script>
+
 </body>
 </html>
